@@ -1,0 +1,300 @@
+% Paste the code in the following sections, section by section. 
+% The variable names must match exactly for Matlab Grader to grade correctly
+
+% ---------------------------------
+% Code to read the data as a table
+% This section should result in variables: DATA_MSFT, DATA_AAPL, DATA_GOOG
+%clear
+%clc
+%disp('Ohno')
+DATA_MSFT = readtable("HistoricalData_MSFT.csv");
+DATA_AAPL = readtable("HistoricalData_AAPL.csv");
+DATA_GOOG = readtable("HistoricalData_GOOG.csv");
+%%READS DATA%%
+
+% ---------------------------------
+% Code to Sanitize the data
+% This section should result in variables: DATA_MSFT, DATA_AAPL, DATA_GOOG
+% The variables should be sanitized without the $ signs, stock price as double precision numbers, and date field as a datetime format
+
+DATA_MSFT.Date = datetime(DATA_MSFT.Date,'InputFormat','MM/dd/yyyy');
+%%MAKES DATE LEGIBLE TO COMPUTER%%
+DATA_MSFT.Close_Last = table2array(DATA_MSFT(:,"Close_Last"));
+DATA_MSFT.Open = table2array(DATA_MSFT(:,"Open"));
+DATA_MSFT.High = table2array(DATA_MSFT(:,"High"));
+DATA_MSFT.Low = table2array(DATA_MSFT(:,"Low"));
+%%TURNING TABLE TO STRING
+DATA_MSFT.Close_Last = replace(DATA_MSFT.Close_Last, '$' , ' ');
+DATA_MSFT.Open = replace(DATA_MSFT.Open, '$' , ' ');
+DATA_MSFT.High = replace(DATA_MSFT.High, '$' , ' ');
+DATA_MSFT.Low = replace(DATA_MSFT.Low, '$' , ' ');
+%%DATA BACK IN ITS PLACE
+DATA_MSFT.Close_Last = str2double(DATA_MSFT.Close_Last);
+DATA_MSFT.Open = str2double(DATA_MSFT.Open);
+DATA_MSFT.High = str2double(DATA_MSFT.High);
+DATA_MSFT.Low = str2double(DATA_MSFT.Low);
+%CONVERT DATA TO DOUBLE 
+
+
+
+DATA_AAPL.Date = datetime(DATA_AAPL.Date,'InputFormat','MM/dd/yyyy');
+%%MAKES DATE LEGIBLE TO COMPUTER%%
+DATA_AAPL.Close_Last = table2array(DATA_AAPL(:,"Close_Last"));
+DATA_AAPL.Open = table2array(DATA_AAPL(:,"Open"));
+DATA_AAPL.High = table2array(DATA_AAPL(:,"High"));
+DATA_AAPL.Low = table2array(DATA_AAPL(:,"Low"));
+%%TURNING TABLE TO STRING
+DATA_AAPL.Close_Last = replace(DATA_AAPL.Close_Last, '$' , ' ');
+DATA_AAPL.Open = replace(DATA_AAPL.Open, '$' , ' ');
+DATA_AAPL.High = replace(DATA_AAPL.High, '$' , ' ');
+DATA_AAPL.Low = replace(DATA_AAPL.Low, '$' , ' ');
+%%DATA BACK IN ITS PLACE
+DATA_AAPL.Close_Last = str2double(DATA_AAPL.Close_Last);
+DATA_AAPL.Open = str2double(DATA_AAPL.Open);
+DATA_AAPL.High = str2double(DATA_AAPL.High);
+DATA_AAPL.Low = str2double(DATA_AAPL.Low);
+
+
+
+DATA_GOOG.Date = datetime(DATA_GOOG.Date,'InputFormat','MM/dd/yyyy');
+%%MAKES DATE LEGIBLE TO COMPUTER%%
+DATA_GOOG.Close_Last = table2array(DATA_GOOG(:,"Close_Last"));
+DATA_GOOG.Open = table2array(DATA_GOOG(:,"Open"));
+DATA_GOOG.High = table2array(DATA_GOOG(:,"High"));
+DATA_GOOG.Low = table2array(DATA_GOOG(:,"Low"));
+%%TURNING TABLE TO STRING
+DATA_GOOG.Close_Last = replace(DATA_GOOG.Close_Last, '$' , ' ');
+DATA_GOOG.Open = replace(DATA_GOOG.Open, '$' , ' ');
+DATA_GOOG.High = replace(DATA_GOOG.High, '$' , ' ');
+DATA_GOOG.Low = replace(DATA_GOOG.Low, '$' , ' ');
+%%DATA BACK IN ITS PLACE
+DATA_GOOG.Close_Last = str2double(DATA_GOOG.Close_Last);
+DATA_GOOG.Open = str2double(DATA_GOOG.Open);
+DATA_GOOG.High = str2double(DATA_GOOG.High);
+DATA_GOOG.Low = str2double(DATA_GOOG.Low);
+
+
+% ---------------------------------
+% Code to extract only the lines between 01/01/2016 and 12/31/2024
+
+I = (DATA_MSFT.Date < datetime("2016-1-1") | DATA_MSFT.Date > datetime("2024-12-31"));
+DATA_MSFT(I,:) = [];
+
+I = (DATA_AAPL.Date < datetime("2016-1-1") | DATA_AAPL.Date > datetime("2024-12-31"));
+DATA_AAPL(I,:) = [];
+
+I = (DATA_GOOG.Date < datetime("2016-1-1") | DATA_GOOG.Date > datetime("2024-12-31"));
+DATA_GOOG(I,:) = [];
+% ---------------------------------
+% Visualization of Stock
+% This should result in three figures with figure ids 1, 2, and 3 for the three stocks
+% Each figure should have labeled axes, title with the ticker and a legend
+% Each figure should have the three curves required, with appropriate color and linewidth
+figure(1);
+
+x = DATA_MSFT.Date;
+y1 = DATA_MSFT.Close_Last;
+y2 = DATA_MSFT.Open;
+y3 = DATA_MSFT.High;
+y4 = DATA_MSFT.Low;
+y5 = (DATA_MSFT.High+DATA_MSFT.Low)./2;
+
+graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+hold on
+plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+
+legend
+grid("on")
+hold off
+title("Stocks")
+xlabel("Time(s)")
+ylabel("Stock price($)")
+
+figure(2);
+
+x = DATA_AAPL.Date;
+y1 = DATA_AAPL.Close_Last;
+y2 = DATA_AAPL.Open;
+y3 = DATA_AAPL.High;
+y4 = DATA_AAPL.Low;
+y5 = (DATA_AAPL.High+DATA_AAPL.Low)./2;
+
+graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+hold on
+plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+
+legend
+grid("on")
+hold off
+title("Stocks")
+xlabel("Time(s)")
+ylabel("Stock price($)")
+
+figure(3);
+
+x = DATA_GOOG.Date;
+y1 = DATA_GOOG.Close_Last;
+y2 = DATA_GOOG.Open;
+y3 = DATA_GOOG.High;
+y4 = DATA_GOOG.Low;
+y5 = (DATA_GOOG.High+DATA_GOOG.Low)./2;
+
+graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+hold on
+plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+
+legend
+grid("on")
+hold off
+title("Stocks")
+xlabel("Time(s)")
+ylabel("Stock price($)")
+
+% ---------------------------------
+% Data to calculate stock volatility using movmean and movstd
+% This section should result in adding columns to the variables: DATA_MSFT, DATA_AAPL, DATA_GOOG
+% The columns should be called MovingAverage and MovingSTD
+% The data should be computed correctly
+
+
+DATA_MSFT.MovingAverage = movmean(DATA_MSFT.Open, [0, 19]);
+DATA_MSFT.MovingSTD = movstd(DATA_MSFT.Open, [0, 19]);
+
+DATA_AAPL.MovingAverage = movmean(DATA_AAPL.Open, [0, 19]);
+DATA_AAPL.MovingSTD = movstd(DATA_AAPL.Open, [0, 19]);
+
+DATA_GOOG.MovingAverage = movmean(DATA_GOOG.Open, [0, 19]);
+DATA_GOOG.MovingSTD = movstd(DATA_GOOG.Open, [0, 19]);
+
+% ---------------------------------
+% Visualization of Stock with Bollinger Bands
+% This should result in three figures with figure ids 101, 102, and 103 for the three stocks
+% Each figure should have labeled axes, title with the ticker and a legend
+% Each figure should have the three curves required, with appropriate color and linewidth
+
+figure(101);
+
+x = DATA_MSFT.Date;
+y1 = DATA_MSFT.Open;
+y2 = DATA_MSFT.High;
+y3 = DATA_MSFT.Low;
+y4 = DATA_MSFT.MovingAverage;
+y5 = DATA_MSFT.MovingSTD;
+y6 = y4 + 2.*y5;
+y7 = y4 - 2.*y5;
+
+hold on
+plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+
+
+legend
+grid("on")
+hold off
+title("Moving Meand and std")
+xlabel("Time")
+ylabel("Stock price")
+
+
+figure(102);
+
+x = DATA_AAPL.Date;
+y1 = DATA_AAPL.Open;
+y2 = DATA_AAPL.High;
+y3 = DATA_AAPL.Low;
+y4 = DATA_AAPL.MovingAverage;
+y5 = DATA_AAPL.MovingSTD;
+y6 = y4 + 2.*y5;
+y7 = y4 - 2.*y5;
+
+hold on
+plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+
+
+legend
+grid("on")
+hold off
+title("Moving Meand and std")
+xlabel("Time")
+ylabel("Stock price")
+
+figure(103);
+
+x = DATA_GOOG.Date;
+y1 = DATA_GOOG.Open;
+y2 = DATA_GOOG.High;
+y3 = DATA_GOOG.Low;
+y4 = DATA_GOOG.MovingAverage;
+y5 = DATA_GOOG.MovingSTD;
+y6 = y4 + 2.*y5;
+y7 = y4 - 2.*y5;
+
+hold on
+plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+
+
+legend
+grid("on")
+hold off
+title("Moving Meand and std")
+xlabel("Time")
+ylabel("Stock price")
+
+
+
+
+% ---------------------------------
+% Analyzing returns
+% Calculating StockPurchased and StockCurrentValue, and adding them as columns to DATA_MSFT, DATA_AAPL, DATA_GOOG
+
+
+DATA_MSFT.StockPurchased = 3./DATA_MSFT.Open;
+DATA_MSFT.StockCurrentValue = DATA_MSFT.StockPurchased .* DATA_MSFT.Open(1);
+
+DATA_AAPL.StockPurchased = 3./DATA_AAPL.Open;
+DATA_AAPL.StockCurrentValue = DATA_AAPL.StockPurchased .* DATA_AAPL.Open(1);
+
+DATA_GOOG.StockPurchased = 3./DATA_GOOG.Open;
+DATA_GOOG.StockCurrentValue = DATA_GOOG.StockPurchased .* DATA_GOOG.Open(1);
+
+% Calculating PortfolioValue_MSFT, PortfolioValue_AAPL, PortfolioValue_GOOG as the net StockCurrentValue
+
+%PortfolioValue_MSFT = DATA_MSFT.StockPurchased .* DATA_MSFT.Open(end);
+
+PortfolioValue_MSFT = sum(DATA_MSFT.StockCurrentValue);
+PortfolioValue_AAPL = sum(DATA_AAPL.StockCurrentValue);
+PortfolioValue_GOOG = sum(DATA_GOOG.StockCurrentValue);
+
+
+% Calculating Returns_MSFT, Returns_AAPL, Returns_GOOG as the net StockCurrentValue
+
+TotalInvestment_MSFT = sum(3 * ones(height(DATA_MSFT),1));
+Returns_MSFT = PortfolioValue_MSFT - TotalInvestment_MSFT;
+
+TotalInvestment_AAPL = sum(3 * ones(height(DATA_AAPL),1));
+Returns_AAPL = PortfolioValue_AAPL - TotalInvestment_AAPL;
+
+TotalInvestment_GOOG = sum(3 * ones(height(DATA_GOOG),1));
+Returns_GOOG = PortfolioValue_GOOG - TotalInvestment_GOOG;
+
+FinalReturns = Returns_MSFT + Returns_AAPL + Returns_GOOG;
+TotalInvestment = TotalInvestment_AAPL + TotalInvestment_MSFT + TotalInvestment_GOOG;
+% Calculating FinalReturns and PercentageFinalReturns as the retuns from all stocks
+PercentageFinalReturns = FinalReturns/TotalInvestment*100
+
+% Calculating TaxOwed using the appropriate capital gains tax percentage
+TaxOwed = FinalReturns*0.15
+
+% Calculating PetPythonBudget
+PetPythonBudget = FinalReturns - TaxOwed

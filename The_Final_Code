@@ -17,61 +17,50 @@ DATA_GOOG = readtable("HistoricalData_GOOG.csv");
 % This section should result in variables: DATA_MSFT, DATA_AAPL, DATA_GOOG
 % The variables should be sanitized without the $ signs, stock price as double precision numbers, and date field as a datetime format
 
-DATA_MSFT.Date = datetime(DATA_MSFT.Date,'InputFormat','MM/dd/yyyy');
-%%MAKES DATE LEGIBLE TO COMPUTER%%
-DATA_MSFT.Close_Last = table2array(DATA_MSFT(:,"Close_Last"));
-DATA_MSFT.Open = table2array(DATA_MSFT(:,"Open"));
-DATA_MSFT.High = table2array(DATA_MSFT(:,"High"));
-DATA_MSFT.Low = table2array(DATA_MSFT(:,"Low"));
-%%TURNING TABLE TO STRING
-DATA_MSFT.Close_Last = replace(DATA_MSFT.Close_Last, '$' , ' ');
-DATA_MSFT.Open = replace(DATA_MSFT.Open, '$' , ' ');
-DATA_MSFT.High = replace(DATA_MSFT.High, '$' , ' ');
-DATA_MSFT.Low = replace(DATA_MSFT.Low, '$' , ' ');
-%%DATA BACK IN ITS PLACE
-DATA_MSFT.Close_Last = str2double(DATA_MSFT.Close_Last);
-DATA_MSFT.Open = str2double(DATA_MSFT.Open);
-DATA_MSFT.High = str2double(DATA_MSFT.High);
-DATA_MSFT.Low = str2double(DATA_MSFT.Low);
-%CONVERT DATA TO DOUBLE 
+DATA_MSFT.Date = datetime(DATA_AAPL.Date,'InputFormat','MM/dd/yyyy');
+
+    for column = 2:6
+        % Convert column to cell array of character vectors if it's not already
+        colData = string(DATA_MSFT{:, column});
+        
+        % Remove dollar signs and commas
+        colData = replace(colData, '$', '');
+        
+        % Convert to double
+        numericData = str2double(colData);
+        % Replace the entire column in the table
+        DATA_MSFT.(DATA_MSFT.Properties.VariableNames{column}) = numericData;
+    end
 
 
 
 DATA_AAPL.Date = datetime(DATA_AAPL.Date,'InputFormat','MM/dd/yyyy');
-%%MAKES DATE LEGIBLE TO COMPUTER%%
-DATA_AAPL.Close_Last = table2array(DATA_AAPL(:,"Close_Last"));
-DATA_AAPL.Open = table2array(DATA_AAPL(:,"Open"));
-DATA_AAPL.High = table2array(DATA_AAPL(:,"High"));
-DATA_AAPL.Low = table2array(DATA_AAPL(:,"Low"));
-%%TURNING TABLE TO STRING
-DATA_AAPL.Close_Last = replace(DATA_AAPL.Close_Last, '$' , ' ');
-DATA_AAPL.Open = replace(DATA_AAPL.Open, '$' , ' ');
-DATA_AAPL.High = replace(DATA_AAPL.High, '$' , ' ');
-DATA_AAPL.Low = replace(DATA_AAPL.Low, '$' , ' ');
-%%DATA BACK IN ITS PLACE
-DATA_AAPL.Close_Last = str2double(DATA_AAPL.Close_Last);
-DATA_AAPL.Open = str2double(DATA_AAPL.Open);
-DATA_AAPL.High = str2double(DATA_AAPL.High);
-DATA_AAPL.Low = str2double(DATA_AAPL.Low);
 
-
+     for column = 2:6
+        % Convert column to cell array of character vectors if it's not already
+        colData = string(DATA_AAPL{:, column});
+        
+        % Remove dollar signs and commas
+        colData = replace(colData, '$', '');
+        
+        % Convert to double
+        numericData = str2double(colData);
+        % Replace the entire column in the table
+        DATA_AAPL.(DATA_AAPL.Properties.VariableNames{column}) = numericData;
+    end
 
 DATA_GOOG.Date = datetime(DATA_GOOG.Date,'InputFormat','MM/dd/yyyy');
-%%MAKES DATE LEGIBLE TO COMPUTER%%
-DATA_GOOG.Close_Last = table2array(DATA_GOOG(:,"Close_Last"));
-DATA_GOOG.Open = table2array(DATA_GOOG(:,"Open"));
-DATA_GOOG.High = table2array(DATA_GOOG(:,"High"));
-DATA_GOOG.Low = table2array(DATA_GOOG(:,"Low"));
-%%TURNING TABLE TO STRING
-DATA_GOOG.Close_Last = replace(DATA_GOOG.Close_Last, '$' , ' ');
-DATA_GOOG.Open = replace(DATA_GOOG.Open, '$' , ' ');
-DATA_GOOG.High = replace(DATA_GOOG.High, '$' , ' ');
-DATA_GOOG.Low = replace(DATA_GOOG.Low, '$' , ' ');
-%%DATA BACK IN ITS PLACE
-DATA_GOOG.Close_Last = str2double(DATA_GOOG.Close_Last);
-DATA_GOOG.Open = str2double(DATA_GOOG.Open);
-DATA_GOOG.High = str2double(DATA_GOOG.High);
-DATA_GOOG.Low = str2double(DATA_GOOG.Low);
+
+    for column = 2:6
+        % Convert column to cell array of character vectors if it's not already
+        colData = string(DATA_GOOG{:, column});
+        % Remove dollar signs and commas
+        colData = replace(colData, '$', '');
+        % Convert to double
+        numericData = str2double(colData);
+        % Replace the entire column in the table
+        DATA_GOOG.(DATA_GOOG.Properties.VariableNames{column}) = numericData;
+    end
 
 
 % ---------------------------------
@@ -92,17 +81,15 @@ DATA_GOOG(I,:) = [];
 % Each figure should have the three curves required, with appropriate color and linewidth
 figure(1);
 
-x = DATA_MSFT.Date;
-y1 = DATA_MSFT.Close_Last;
-y2 = DATA_MSFT.Open;
-y3 = DATA_MSFT.High;
-y4 = DATA_MSFT.Low;
-y5 = (DATA_MSFT.High+DATA_MSFT.Low)./2;
+x1 = DATA_MSFT.Date;
+y21 = DATA_MSFT.Open;
+y31 = DATA_MSFT.High;
+y41 = DATA_MSFT.Low;
 
-graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+graph1 = plot(x1,y21,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
 hold on
-plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
-plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+plot(x1,y31,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x1,y41,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
 
 legend
 grid("on")
@@ -113,17 +100,15 @@ ylabel("Stock price($)")
 
 figure(2);
 
-x = DATA_AAPL.Date;
-y1 = DATA_AAPL.Close_Last;
-y2 = DATA_AAPL.Open;
-y3 = DATA_AAPL.High;
-y4 = DATA_AAPL.Low;
-y5 = (DATA_AAPL.High+DATA_AAPL.Low)./2;
+x2 = DATA_AAPL.Date;
+y22 = DATA_AAPL.Open;
+y32 = DATA_AAPL.High;
+y42 = DATA_AAPL.Low;
 
-graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+graph1 = plot(x2,y22,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
 hold on
-plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
-plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+plot(x2,y32,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x2,y42,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
 
 legend
 grid("on")
@@ -134,17 +119,15 @@ ylabel("Stock price($)")
 
 figure(3);
 
-x = DATA_GOOG.Date;
-y1 = DATA_GOOG.Close_Last;
-y2 = DATA_GOOG.Open;
-y3 = DATA_GOOG.High;
-y4 = DATA_GOOG.Low;
-y5 = (DATA_GOOG.High+DATA_GOOG.Low)./2;
+x3 = DATA_GOOG.Date;
+y23 = DATA_GOOG.Open;
+y33 = DATA_GOOG.High;
+y43 = DATA_GOOG.Low;
 
-graph = plot(x,y2,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
+graph3 = plot(x3,y23,"LineWidth", 1.5, "Color", "k","DisplayName","Opening Price");
 hold on
-plot(x,y3,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
-plot(x,y4,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
+plot(x3,y33,"LineWidth", 0.5, "Color", "b","DisplayName","High Price");
+plot(x3,y43,"LineWidth", 0.5, "Color", "b","DisplayName","Low Price");
 
 legend
 grid("on")
@@ -177,20 +160,20 @@ DATA_GOOG.MovingSTD = movstd(DATA_GOOG.Open, [0, 19]);
 
 figure(101);
 
-x = DATA_MSFT.Date;
-y1 = DATA_MSFT.Open;
-y2 = DATA_MSFT.High;
-y3 = DATA_MSFT.Low;
-y4 = DATA_MSFT.MovingAverage;
-y5 = DATA_MSFT.MovingSTD;
-y6 = y4 + 2.*y5;
-y7 = y4 - 2.*y5;
+xx1 = DATA_MSFT.Date;
+yy11 = DATA_MSFT.Open;
+yy21 = DATA_MSFT.High;
+yy31 = DATA_MSFT.Low;
+yy41 = DATA_MSFT.MovingAverage;
+yy51 = DATA_MSFT.MovingSTD;
+yy61 = yy41 + 2.*yy51;
+yy71 = yy41 - 2.*yy51;
 
 hold on
-plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
-plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
-plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
-plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+plot(xx1,yy11,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(xx1,yy41,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(xx1,yy61,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(xx1,yy71,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
 
 
 legend
@@ -203,20 +186,20 @@ ylabel("Stock price")
 
 figure(102);
 
-x = DATA_AAPL.Date;
-y1 = DATA_AAPL.Open;
-y2 = DATA_AAPL.High;
-y3 = DATA_AAPL.Low;
-y4 = DATA_AAPL.MovingAverage;
-y5 = DATA_AAPL.MovingSTD;
-y6 = y4 + 2.*y5;
-y7 = y4 - 2.*y5;
+xx2 = DATA_AAPL.Date;
+yy12 = DATA_AAPL.Open;
+yy22 = DATA_AAPL.High;
+yy32 = DATA_AAPL.Low;
+yy42 = DATA_AAPL.MovingAverage;
+yy52 = DATA_AAPL.MovingSTD;
+yy62 = yy42 + 2.*yy52;
+yy72 = yy42 - 2.*yy52;
 
 hold on
-plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
-plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
-plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
-plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+plot(xx2,yy12,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(xx2,yy42,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(xx2,yy62,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(xx2,yy72,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
 
 
 legend
@@ -228,20 +211,20 @@ ylabel("Stock price")
 
 figure(103);
 
-x = DATA_GOOG.Date;
-y1 = DATA_GOOG.Open;
-y2 = DATA_GOOG.High;
-y3 = DATA_GOOG.Low;
-y4 = DATA_GOOG.MovingAverage;
-y5 = DATA_GOOG.MovingSTD;
-y6 = y4 + 2.*y5;
-y7 = y4 - 2.*y5;
+xx3 = DATA_GOOG.Date;
+yy13 = DATA_GOOG.Open;
+yy23 = DATA_GOOG.High;
+yy33 = DATA_GOOG.Low;
+yy43 = DATA_GOOG.MovingAverage;
+yy53 = DATA_GOOG.MovingSTD;
+yy63 = yy43 + 2.*yy53;
+yy73 = yy43 - 2.*yy53;
 
 hold on
-plot(x,y1,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
-plot(x,y4,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
-plot(x,y6,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
-plot(x,y7,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
+plot(xx3,yy13,"LineWidth", 0.5, "Color", "k","DisplayName","Opening Price");
+plot(xx3,yy43,"LineWidth", 1.5, "Color", "k","DisplayName","Moving Average");
+plot(xx3,yy63,"LineWidth", 1, "Color", "r","DisplayName","Upper STD");
+plot(xx3,yy73,"LineWidth", 1, "Color", "r","DisplayName","Lower STD");
 
 
 legend
@@ -291,9 +274,13 @@ Returns_GOOG = PortfolioValue_GOOG - TotalInvestment_GOOG;
 FinalReturns = Returns_MSFT + Returns_AAPL + Returns_GOOG;
 TotalInvestment = TotalInvestment_AAPL + TotalInvestment_MSFT + TotalInvestment_GOOG;
 % Calculating FinalReturns and PercentageFinalReturns as the retuns from all stocks
-PercentageFinalReturns = FinalReturns/TotalInvestment*100
+PercentageFinalReturns = FinalReturns/TotalInvestment*100;
 
 % Calculating TaxOwed using the appropriate capital gains tax percentage
+TaxOwed = FinalReturns*0.15;
+
+% Calculating PetPythonBudget
+PetPythonBudget = FinalReturns - TaxOwed;
 TaxOwed = FinalReturns*0.15
 
 % Calculating PetPythonBudget
